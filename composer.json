@@ -1,0 +1,40 @@
+{
+  "name": "takuya/php-ffmpeg-cmd-shortcuts",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Takuya\\": "src/",
+      "Takuya\\FFMpeg\\": "src/FFMpeg",
+      "Takuya\\Progress\\": "src/Progress"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Takuya\\Tests\\": "tests/"
+    },
+    "files": [
+      "tests/helpers.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "takuya",
+      "email": "takuya.1st+nospam@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "^12.1",
+    "ext-gd": "*",
+    "brianium/paratest": "^7.10"
+  },
+  "repositories": {
+    "php-helper-functions": {
+      "type": "vcs",
+      "url": "https://github.com/takuya/php-helper-functions"
+    }
+  },
+  "require": {
+    "takuya/php-helper-functions": "^0.1.2",
+    "takuya/php-process-exec": "^0.1.5"
+  }
+}
