@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name : apt install
+        shell: bash
+        run : |
+          sudo apt update
+          sudo apt install pv ffmpeg
       - name : composer install
         shell: bash
         run : |
