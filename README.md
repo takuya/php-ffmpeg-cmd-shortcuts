@@ -6,6 +6,13 @@ This package is shortcut to ffmpeg movie convert.
 ```
 ```
 
+## Requirements.
+These command are used.
+
+- ffmpeg 
+- ffprobe
+- pv
+
 # Sample
 
 1. Convert mp4 to mkv
@@ -14,7 +21,8 @@ This package is shortcut to ffmpeg movie convert.
 4. Cut by time
 5. Resize  movie 
 6. Movie info
-7. 
+7. Compare encode quality
+8. Watching progress 
 
 
 ## Covert mp4 to mkv
@@ -57,4 +65,37 @@ $ret = $ffprobe->movie_info($path);
 $streams = $ffprobe->list_streams($path)
 $codec = $ffprobe->movie_codec($path);
 ```
+## Quality
+```php
+$ffmpeg = new FFMpeg_PSNR_SSSIM($src, $dst);
+$q = $ffmpeg->getQuality();
+$ssim = $q['ssim'];
+$psnr = $q['psnr'];
+```
 
+## watch encode progress
+
+ffmpeg verbose output.
+```php
+$ffmpeg = new FFMpegEncode('in.mp4', 'out.mkv');
+$ffmpeg->setOnFFMpegProgress(fn ( $ffmpeg_stats ) =>dump($ffmpeg_stats));
+$ffmpeg->start();
+```
+show read bytes by `pv` ( pipe viewer )
+```php
+$ffmpeg = new FFMpegEncode('in.mp4', 'out.mkv');
+$ffmpeg->setOnPvProgress(function ($pv_stats ) {
+  dump($pv_stats);
+});
+$ffmpeg->setOnFFMpegProgress(function ( $ffmpeg_stats )  {
+  dump($ffmpeg_stats);
+});
+$ffmpeg->start();
+
+```
+Limit Bps by `pv` ( pipe viewer )
+```php
+$ffmpeg = new FFMpegEncode('in.mp4', 'out.mkv');
+$ffmpeg->setPvOpts(['-L 2M']);
+$ffmpeg->start();
+```
