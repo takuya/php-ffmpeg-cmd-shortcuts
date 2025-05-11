@@ -3,7 +3,12 @@
 This package is shortcut to ffmpeg movie convert.
 
 # Installation
-```
+From GitHub
+```shell
+name='php-ffmpeg-cmd-shortcuts'
+composer config repositories.$name \
+vcs https://github.com/takuya/$name  
+composer require takuya/$name
 ```
 
 ## Requirements.

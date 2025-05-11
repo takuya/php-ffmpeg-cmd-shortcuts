@@ -16,7 +16,7 @@ jobs:
         shell: bash
         run : |
           sudo apt update
-          sudo apt install pv ffmpeg
+          sudo apt install pv ffmpeg -y
       - name : composer install
         shell: bash
         run : |
