@@ -1,0 +1,50 @@
+name: main
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '8 */10 * * *'
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name : composer install
+        shell: bash
+        run : |
+          php -v
+          composer install  -q --no-ansi --no-interaction --no-progress
+      - name : phpunit
+        shell: bash
+        run : |
+          vendor/bin/paratest
+      - name : log
+        shell: bash
+        run : |
+          date -I > last-tested.txt
+      - name: push updated lists
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: update tested date.
+#  run-composer-install:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name:  installation
+#        shell: bash
+#        run: |
+#          php -v
+#          name='php-helper-functions'
+#          composer require takuya/php-proc_open-wrapper
+#          composer config repositories.$name \
+#          vcs https://github.com/takuya/${name}
+#          composer require takuya/$name
+#          cat <<'EOS' > sample.php
+#          <?php
+#          require_once 'vendor/autoload.php';
+#          var_dump(Takuya\Helpers\Array\array_last([1,2]));
+#          EOS
+#          cat sample.php
+#          php sample.php
