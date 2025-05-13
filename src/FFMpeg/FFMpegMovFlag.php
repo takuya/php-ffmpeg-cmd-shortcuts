@@ -10,6 +10,7 @@ use function Takuya\Helpers\Shell\find_path;
 use function Takuya\Helpers\Shell\shell_args_cleanup;
 use function Takuya\Helpers\Array\array_insert_after;
 use function Takuya\Helpers\Array\array_replace_entry;
+use function Takuya\Helpers\Shell\build_cmd;
 
 class FFMpegMovFlag {
 
@@ -32,23 +33,19 @@ class FFMpegMovFlag {
   }
 
   protected function checkSrc ( $src ) {
-    $ffprobe = new FFProbe();
-    if ( !$ffprobe->is_mp4( $src ) ) {
+    if ( !(new FFProbe())->is_mp4( $src ) ) {
       throw new InvalidArgumentException( "mp4 以外にmovflagつけても意味がない。" );
     }
   }
-
-  protected function buildCommand ( $src, $dst, $decode_opt, $encode_opt ): array {
-    $ffmpeg = [find_path( 'ffmpeg' ), '-y -i -c:a copy -c:v copy -movflags faststart',
-      $decode_opt, $encode_opt,
-      'OUTPUT',
-    ];
-    $ffmpeg = shell_args_cleanup( $ffmpeg );
+  
+  protected function buildCommand($src, $dst, $decode_opt, $encode_opt):array{
+    $ffmpeg = build_cmd(
+      "ffmpeg -y -i %SRC% -c:a copy -c:v copy -movflags faststart {$decode_opt} {$encode_opt} %OUT%",
+      ['%OUT%' => $dst, '%SRC%' => $src]
+    );
     $ffmpeg = array_insert_after($ffmpeg, '-y', '-hide_banner');
-    $ffmpeg = array_insert_after( $ffmpeg, '-i', $src );
-    $ffmpeg = array_replace_entry($ffmpeg,'OUTPUT',$dst);
-
-    $this->last_cmd = join( ' ', $ffmpeg );
+    //
+    $this->last_cmd = join(' ', $ffmpeg);
     return $ffmpeg;
   }
 }
