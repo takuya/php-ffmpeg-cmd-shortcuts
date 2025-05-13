@@ -10,6 +10,7 @@ use function Takuya\Helpers\Array\array_flatten;
 use function Takuya\Helpers\String\empty_str;
 use function Takuya\Helpers\Array\array_insert_after;
 use function Takuya\Helpers\Shell\build_cmd;
+use function Takuya\Helpers\String\cjoin;
 
 class FFMpegThumbnailer {
 
@@ -59,7 +60,7 @@ class FFMpegThumbnailer {
       "%H%"    => $height,
     ]);
     //
-    $this->last_cmd = join( " ", $cmd_struct );
+    $this->last_cmd = cjoin($cmd_struct, " ");
     return $cmd_struct;
   }
 }
