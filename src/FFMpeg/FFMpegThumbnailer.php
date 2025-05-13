@@ -9,6 +9,7 @@ use function Takuya\Helpers\Shell\find_path;
 use function Takuya\Helpers\Array\array_flatten;
 use function Takuya\Helpers\String\empty_str;
 use function Takuya\Helpers\Array\array_insert_after;
+use function Takuya\Helpers\Shell\build_cmd;
 
 class FFMpegThumbnailer {
 
@@ -48,15 +49,17 @@ class FFMpegThumbnailer {
   }
 
   protected function buildCommand ( $src, ?int $width, int $height, float $time_offset ): array {
+
+    $cmd_struct = build_cmd(
+    'ffmpeg -ss %SS% -i %SRC% -vframes 1 -f %TYPE% -vf scale=%W%:%H%  pipe:1', [
+      "%SRC%"  => $src,
+      "%SS%"   => $time_offset,
+      "%TYPE%" => "image2",
+      "%W%"    => $width??-1,
+      "%H%"    => $height,
+    ]);
     //
-    $width = $width ?? '-1';
-    $ffmpeg = [find_path( 'ffmpeg' ), '-ss', '-i',
-      '-vframes 1 ', '-f image2', '-vf', "scale={$width}:{$height}", 'pipe:1'];
-    $ffmpeg = array_flatten( array_map( fn( $e ) => preg_split( '/\s+/', trim( $e ) ), array_flatten( $ffmpeg ) ) );
-    $ffmpeg = array_filter( $ffmpeg, fn( $e ) => !empty_str( $e ) );
-    $ffmpeg = array_insert_after( $ffmpeg, '-i', $src );
-    $ffmpeg = array_insert_after( $ffmpeg, '-ss', $time_offset );
-    $this->last_cmd = join( " ", $ffmpeg );
-    return $ffmpeg;
+    $this->last_cmd = join( " ", $cmd_struct );
+    return $cmd_struct;
   }
 }

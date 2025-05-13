@@ -6,7 +6,10 @@
       "Takuya\\": "src/",
       "Takuya\\FFMpeg\\": "src/FFMpeg",
       "Takuya\\Progress\\": "src/Progress"
-    }
+    },
+    "exclude-from-classmap": [
+      "Takuya\\Tests\\*"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
