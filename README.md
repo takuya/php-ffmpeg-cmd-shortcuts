@@ -98,7 +98,7 @@ $ffmpeg->setOnFFMpegProgress(function ( $ffmpeg_stats )  {
 $ffmpeg->start();
 
 ```
-Limit Bps by `pv` ( pipe viewer )
+Limit Encode Transfer speed by `pv` ( pipe viewer )
 ```php
 $ffmpeg = new FFMpegEncode('in.mp4', 'out.mkv');
 $ffmpeg->setPvOpts(['-L 2M']);
